@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alpheios-components@latest/dist/style/style-components.min.css"/>
+  <link rel="stylesheet" href="/sakura.css"/>
+  <title>Markdown Greek reader</title>
+  <style>
+    .tab {
+      overflow: hidden;
+      border: 1px solid #ccc;
+      background-color: #f1f1f1;
+    }
+    .tab button {
+      background-color: inherit;
+      float: left;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      padding: 14px 16px;
+      transition: 0.3s;
+      color: black;
+    }
+    .tab button:hover {
+      background-color: #ddd;
+    }
+    .tab button.active {
+      background-color: #ccc;
+    }
+    .tabcontent {
+      display: none;
+      padding: 6px 12px;
+      border: 1px solid #ccc;
+      border-top: none;
+    }
+  </style>
+</head>
+<body>
+    <h1>Markdown Greek reader</h1>
+            <h2>with Alpheios Reading tools</h2>
+<div class="tab">
+  <button class="tablinks active" onclick="openTab(event, 'Markdown')">Markdown</button>
+  <button class="tablinks" onclick="openTab(event, 'HTML')">HTML</button>
+</div>
+
+<div id="Markdown" class="tabcontent">
+  <h2>Write your markdown here:</h2>
+  <textarea id="markdown-input" rows="10"></textarea>
+  <br>
+  <button onclick="convertMarkdown()">Convert to HTML</button>
+</div>
+
+<div id="HTML" class="tabcontent">
+  <h2>Converted HTML:</h2>
+
+  <div id="html-output" class="alpheios-enabled" lang="grc"></div>
+</div>
+
+<p>Built using the wonderful reading tolls from <a href="https://alpheios.net/pages/tools/">Alpheios</a> and <a href="https://github.com/oxalorg/sakura">Sakura</a> css.</p>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
+<script>
+
+var converter = new showdown.Converter();
+
+function openTab(evt, tabName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(tabName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+
+function convertMarkdown() {
+  var markdown = document.getElementById("markdown-input").value;
+  var html = converter.makeHtml(markdown);
+  document.getElementById("html-output").innerHTML = "<div>" + html + "</div>";
+  openTab('', 'HTML');
+}
+
+openTab('', 'Markdown');
+</script>
+<script type="text/javascript">
+  document.addEventListener("DOMContentLoaded", function(event) {
+    import ("https://cdn.jsdelivr.net/npm/alpheios-embedded@latest/dist/alpheios-embedded.min.js").then(embedLib => {
+      window.AlpheiosEmbed.importDependencies({
+        mode: 'cdn'
+      }).then(Embedded => {
+        new Embedded({
+          clientId: 'flet-test'
+        }).activate();
+      }).catch(e => {
+        console.error(`Import of Alpheios embedded library dependencies failed: ${e}`)
+      })
+    }).catch(e => {
+      console.error(`Import of Alpheios Embedded library failed: ${e}`)
+    })
+  });
+</script>
+
+</body>
+</html>
